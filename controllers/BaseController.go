@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ygqbasic/poseidon/enums"
-	"github.com/ygqbasic/poseidon/models"
-	"github.com/ygqbasic/poseidon/utils"
+	"github.com/ygqbasic/nuwa/enums"
+	"github.com/ygqbasic/nuwa/models"
+	"github.com/ygqbasic/nuwa/utils"
 
 	"github.com/astaxie/beego"
 )

@@ -2,7 +2,8 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/ygqbasic/poseidon/models"
+
+	"github.com/ygqbasic/nuwa/models"
 )
 
 type TotalCollectRateController struct {

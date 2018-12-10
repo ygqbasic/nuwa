@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"github.com/ygqbasic/poseidon/controllers"
+	"github.com/ygqbasic/nuwa/controllers"
 
 	"github.com/astaxie/beego"
 )

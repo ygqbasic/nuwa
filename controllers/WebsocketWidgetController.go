@@ -3,8 +3,8 @@ package controllers
 import (
 	"fmt"
 	"github.com/gorilla/websocket"
-	"github.com/ygqbasic/poseidon/models"
-	"github.com/ygqbasic/poseidon/utils"
+	"github.com/ygqbasic/nuwa/models"
+	"github.com/ygqbasic/nuwa/utils"
 	"log"
 	"time"
 )

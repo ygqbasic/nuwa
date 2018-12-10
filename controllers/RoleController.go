@@ -3,8 +3,8 @@ package controllers
 import (
 	"encoding/json"
 
-	"github.com/ygqbasic/poseidon/enums"
-	"github.com/ygqbasic/poseidon/models"
+	"github.com/ygqbasic/nuwa/enums"
+	"github.com/ygqbasic/nuwa/models"
 
 	"fmt"
 	"strconv"

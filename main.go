@@ -1,8 +1,8 @@
 package main
 
 import (
-	_ "github.com/ygqbasic/poseidon/routers"
-	_ "github.com/ygqbasic/poseidon/sysinit"
+	_ "github.com/ygqbasic/nuwa/routers"
+	_ "github.com/ygqbasic/nuwa/sysinit"
 
 	"github.com/astaxie/beego"
 )

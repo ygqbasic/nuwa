@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 
-	"github.com/ygqbasic/poseidon/utils"
+	"github.com/ygqbasic/nuwa/utils"
 
 	"github.com/astaxie/beego/orm"
 )
