@@ -157,26 +157,6 @@ func (this *HomeController) GetCustomerForMeter() {
 	}
 }
 
-//取DTU数量
-func (this *HomeController) GetDtuCount() {
-	before := time.Now().Unix()
-	count := models.EquipmentDtuConfigCount()
-	after := time.Now().Unix()
-	beego.Info(fmt.Sprintf("GetDtuCount spend: %d ns", after-before))
-
-	this.jsonResult(enums.JRCodeSucc, "", count)
-}
-
-//取电表数量
-func (this *HomeController) GetMeterCount() {
-	before := time.Now().Unix()
-	count := models.EquipmentMeterConfigCount()
-	after := time.Now().Unix()
-	beego.Info(fmt.Sprintf("GetMeterCount spend: %d s", after-before))
-
-	this.jsonResult(enums.JRCodeSucc, "", count)
-}
-
 //取月采集数量
 func (this *HomeController) GetCollectCountOfMonth() {
 	before := time.Now().Unix()
@@ -196,18 +176,6 @@ func (this *HomeController) GetOverviewToday() {
 	if data, err := models.GetOverviewToday(choiceDate); err != nil {
 		after := time.Now().Unix()
 		beego.Info(fmt.Sprintf("GetOverviewToday spend: %d s", after-before))
-		this.jsonResult(enums.JRCodeFailed, "", 0)
-	} else {
-		this.jsonResult(enums.JRCodeSucc, "", data)
-	}
-}
-
-//获取客户分布
-func (this *HomeController) GetCustomerZone() {
-	before := time.Now().Unix()
-	if data, err := models.GetCustomerZone(); err != nil {
-		after := time.Now().Unix()
-		beego.Info(fmt.Sprintf("GetCustomerZone spend: %d s", after-before))
 		this.jsonResult(enums.JRCodeFailed, "", 0)
 	} else {
 		this.jsonResult(enums.JRCodeSucc, "", data)
