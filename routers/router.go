@@ -50,6 +50,22 @@ func init() {
 	beego.Router("/collectbaseinfo/datagrid", &controllers.CollectBaseInfoController{}, "Get,Post:DataGrid")
 	beego.Router("/collectbaseinfo/datalist", &controllers.CollectBaseInfoController{}, "Post:DataList")
 
+	//Cluster
+	beego.Router("/cluster/index", &controllers.ClusterController{}, "*:Index")
+	beego.Router("/cluster/datagrid", &controllers.ClusterController{}, "Get,Post:DataGrid")
+	beego.Router("/cluster/datacard", &controllers.ClusterController{}, "Get,Post:DataCard")
+	beego.Router("/cluster/datalist", &controllers.ClusterController{}, "Post:DataList")
+	//beego.Router("/cluster/?:clusterid/hosts", &controllers.ClusterController{}, "*:Hosts")
+	beego.Router("/cluster/edit/?:id", &controllers.ClusterController{}, "Get,Post:Edit")
+	beego.Router("/cluster/delete", &controllers.ClusterController{}, "Post:Delete")
+
+	//Host
+	beego.Router("/host/index", &controllers.HostController{}, "*:Index")
+	beego.Router("/host/datagrid", &controllers.HostController{}, "Get,Post:DataGrid")
+	beego.Router("/host/datalist", &controllers.HostController{}, "Post:DataList")
+	beego.Router("/host/edit/?:id", &controllers.HostController{}, "Get,Post:Edit")
+	beego.Router("/host/delete", &controllers.HostController{}, "Post:Delete")
+
 	//BackendConf
 	beego.Router("/backendconf/index", &controllers.BackendConfController{}, "*:Index")
 	beego.Router("/backendconf/datagrid", &controllers.BackendConfController{}, "Get,Post:DataGrid")
