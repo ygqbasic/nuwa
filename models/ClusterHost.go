@@ -49,7 +49,28 @@ func RetrieveClusterHosts(clusterid int) ([]*ClusterHost, int64) {
 	return data, total
 }
 
-func ClusterHostPageList(params *HostQueryParam) ([]*ClusterHost, int64) {
+func RetrieveClusterHost(
+	clusterID int,
+	hostID string,
+) *ClusterHost {
+
+	query := orm.NewOrm().QueryTable(ClusterHostTBName())
+	data := make([]*ClusterHost, 0)
+
+	query = query.Filter("Cluster__Id", clusterID)
+	query = query.Filter("Id", hostID)
+
+	total, _ := query.Count()
+	query.All(&data)
+
+	if total < 1 {
+		return nil // ,fmt.Errorf("can't find cluster %s host %s", clusterID, hostID)
+	}
+
+	return data[0]
+}
+
+func ClusterHostPageList(params *ClusterHostQueryParam) ([]*ClusterHost, int64) {
 	query := orm.NewOrm().QueryTable(ClusterHostTBName())
 	data := make([]*ClusterHost, 0)
 
@@ -74,11 +95,11 @@ func ClusterHostPageList(params *HostQueryParam) ([]*ClusterHost, int64) {
 	return data, total
 }
 
-func ClusterHostDataList(params *HostQueryParam) []*Host {
+func ClusterHostDataList(params *ClusterHostQueryParam) []*ClusterHost {
 	params.Limit = -1
 	params.Sort = "Id"
 	params.Order = "asc"
-	data, _ := HostPageList(params)
+	data, _ := ClusterHostPageList(params)
 	return data
 }
 
@@ -87,4 +108,11 @@ func ClusterHostBatchDelete(ids []int) (int64, error) {
 	query := orm.NewOrm().QueryTable(ClusterTBName())
 	num, err := query.Filter("id__in", ids).Delete()
 	return num, err
+}
+
+type Host struct {
+	Id          string `json:"id"`
+	HostName    string `json:"hostname"`
+	Ip          string `json:"ip"`
+	Description string `json:"description"`
 }

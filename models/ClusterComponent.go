@@ -88,3 +88,15 @@ func ClusterComponentBatchDelete(ids []int) (int64, error) {
 	num, err := query.Filter("id__in", ids).Delete()
 	return num, err
 }
+
+type MetaComponent struct {
+	Id       int                    `json:"id"`
+	Name     string                 `json:"name"`
+	Version  string                 `json:"version"`
+	Property map[string]interface{} `json:"properties"`
+}
+
+type Component struct {
+	MetaComponent
+	Hosts map[string][]string `json:"hosts"`
+}
