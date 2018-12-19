@@ -1,0 +1,175 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        {{.pageTitle}}
+        <small>{{.pageTitle}}</small>
+        
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{urlfor "HomeController.Index"}}">
+                <i class="fa fa-dashboard"></i> 首页</a>
+        </li>
+        <li class="active">{{.pageTitle}}</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content container-fluid">
+    <!-- 页面内容开始 -->
+
+    <!--Start search form-->
+    <div class="row">
+        <div class="col-md-12">           
+            <div class="box box-solid">
+                <div class="box-body">
+                    <div class="btn-group" id="toolbar">
+                        {{ if .canEdit}}
+                        <!-- <button class="btn btn-info" href="javascript:;" onclick="EditFun(0)">
+                            <i class="fa fa-plus"></i> 添加</button>     -->
+                            <button class="btn btn-info" href="javascript:;" onclick="void(0)">
+                                    <i class="fa fa-caret-right"></i> 开始安装</button>    
+                        {{end}}
+
+                        {{ if .canDelete}}                            
+                        <button class="btn btn-danger table-btn-check-enable" disabled onclick="DeleteFun()">
+                            <i class="fa fa-trash"></i> 删除
+                        </button>
+                        {{end}}  
+                    </div>
+                    <table id="dataGrid"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.searchform-->
+    <div class="row">
+            <!-- <div  id="clusterHosts" class="col-md-6"> 
+            </div> -->
+            <section class="col-md-6 connectedSortable">
+                    <!-- TABLE: LATEST ORDERS -->
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <i class="fa  fa-desktop"></i>
+                            <h3 class="box-title">Hosts
+                                <!-- -{{.clusterId}} -->
+                            </h3>
+        
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <!-- <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> -->
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table id="clusterHosts" class="table no-margin">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>名称</th>
+                                        <th>IP</th>
+                                        <th>描述</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                   
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer clearfix">
+                            <a href="javascript:void(0)" onclick="EditHostFun(0)" class="btn btn-sm btn-info btn-flat pull-left">New Host</a>    
+                        </div>
+                        <!-- /.box-footer -->
+                    </div>
+                    <!-- /.box -->
+            </section>
+            <section class="col-md-6 connectedSortable">
+                    <!-- TABLE: LATEST ORDERS -->
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <i class="fa  fa-houzz"></i>
+                            <h3 class="box-title">Components</h3>
+        
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <!-- <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> -->
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table  id="clusterComponents" class="table no-margin">
+                                    <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>服务名称</th>
+                                        <th>版本</th>
+                                        <th>属性</th>
+                                        <th>主机</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer clearfix">
+                            <a href="javascript:void(0)" onclick="EditComponentFun(0)" class="btn btn-sm btn-info btn-flat pull-left">New Component</a>
+                            
+                        </div>
+                        <!-- /.box-footer -->
+                    </div>
+                    <!-- /.box -->
+            </section>
+     <!--    <div class="col-lg-3 col-xs-6">
+           
+            <div class="small-box bg-aqua-gradient">
+                <div class="inner">
+                    <h3 id="dtuCount">3</h3>
+                    <p>测试集群（一）</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-android-laptop"></i>
+                </div>
+                <a href="../equipmentdtuconfig/index" class="small-box-footer">更多信息 <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div> -->
+        <!-- ./col -->
+
+       
+    </div>
+    
+    <!-- 页面内容结束 -->
+
+    <!--Modal-->
+    <div class="modal fade" id="NoPermissionModal">
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <!-- <button type="button" class="close" onclick="location.reload();;">×</button> -->
+                    <h4 class="modal-title" id="NoPermissionModalLabel">系统消息</h4>
+                </div>
+                <div class="modal-body">
+                    <iframe id="NoPermissioniframe" name="NoPermissioniframe" width="100%" style="min-height:320px;" onload="this.height=this.contentWindow.document.documentElement.scrollHeight" height="100%" frameborder="0"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default " data-dismiss="modal">    关  闭    </button>
+                    <!-- <button class="btn btn-default"  type="button" onclick="location.reload();;" >    关  闭    </button> -->
+                    <button class="btn btn-primary"  type="button" onclick="Save()" >    保  存    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</section>
+<!-- /.content -->

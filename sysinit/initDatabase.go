@@ -34,7 +34,7 @@ func InitDatabase() {
 	//数据库端口
 	dbPort := beego.AppConfig.String(dbType + "::db_port")
 
-	dbName2 := "yftimingdata"
+	//dbName2 := "yftimingdata"
 
 	switch dbType {
 	case "sqlite3":
@@ -43,7 +43,7 @@ func InitDatabase() {
 		dbCharset := beego.AppConfig.String(dbType + "::db_charset")
 		orm.RegisterDataBase(dbAlias, dbType, dbUser+":"+dbPwd+"@tcp("+dbHost+":"+dbPort+")/"+dbName+"?charset="+dbCharset+"&loc=Asia%2FShanghai", 30)
 
-		orm.RegisterDataBase(dbName2, dbType, dbUser+":"+dbPwd+"@tcp("+dbHost+":"+dbPort+")/"+dbName2+"?charset="+dbCharset+"&loc=Asia%2FShanghai", 30)
+		//orm.RegisterDataBase(dbName2, dbType, dbUser+":"+dbPwd+"@tcp("+dbHost+":"+dbPort+")/"+dbName2+"?charset="+dbCharset+"&loc=Asia%2FShanghai", 30)
 	}
 
 	//如果是开发模式，则显示命令信息

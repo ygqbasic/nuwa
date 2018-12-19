@@ -8,13 +8,13 @@ import (
 
 type Host struct {
 	Id          int       `form:"Id"`
-	HostName    string    `orm:"size(50)" Json:"hostname"`
+	HostName    string    `orm:"size(50);unique" Json:"hostname"`
 	Ip          string    `orm:"size(24)" Json:"ip"`
 	Description string    `orm:"size(256)" Json:"description"`
 	CreateUser  string    `orm:"column(createuser)" form:"CreateUser"`
 	CreateDate  time.Time `orm:"column(createdate)" form:"CreateDate"`
 	ChangeUser  string    `orm:"column(changeuser)" form:"ChangeUser"`
-	ChangeDate  time.Time `orm:"column(changedate)" form:"ChangeDate"`
+	ChangeDate  time.Time `orm:"column(changedate);null" form:"ChangeDate"`
 }
 
 func init() {
@@ -36,12 +36,11 @@ type HostQueryParam struct {
 	Ip       string //为空不查询，有值精确查询
 }
 
-func RetrieveHosts(params *HostQueryParam) ([]*Host, int64) {
-	query := orm.NewOrm().QueryTable(HostTBName())
-	data := make([]*Host, 0)
+func RetrieveHosts(clusterid int) ([]*ClusterHostRel, int64) {
+	query := orm.NewOrm().QueryTable(ClusterHostRelTBName())
+	data := make([]*ClusterHostRel, 0)
 
-	query = query.Filter("HostName__istartswith", params.HostName)
-	query = query.Filter("Ip__istartswith", params.Ip)
+	query = query.Filter("Cluster__Id", clusterid)
 
 	total, _ := query.Count()
 	query.All(&data)

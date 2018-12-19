@@ -36,10 +36,45 @@ func (this *ClusterController) Index() {
 	this.Data["canDelete"] = this.checkActionAuthor("ClusterController", "Delete")
 }
 
-func (this *ClusterController) DataCard() {
+func (this *ClusterController) Detail() {
+
+	Id, _ := this.GetInt(":clusterid", 0)
+	m := models.Cluster{Id: Id}
+	if Id > 0 {
+		o := orm.NewOrm()
+		err := o.Read(&m)
+		if err != nil {
+			this.pageError("数据无效，请刷新后重试")
+		}
+	} else {
+		m.State = "initial"
+	}
+	this.Data["pageTitle"] = m.Name
+	this.Data["showMoreQuery"] = true
+	this.Data["clusterId"] = m.Id
+
+	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)
+	this.setTpl()
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["headcssjs"] = "cluster/detail_headcssjs.html"
+	this.LayoutSections["footerjs"] = "cluster/detail_footerjs.html"
+
+	//页面里按钮权限控制
+	this.Data["canEdit"] = this.checkActionAuthor("ClusterController", "Edit")
+	this.Data["canDelete"] = this.checkActionAuthor("ClusterController", "Delete")
+}
+
+// @Title RetrieveClusters
+// @Description get all cluster
+// @Param   key     path    string  true        "The email for login"
+// @Success 200 {object} models.Cluster
+// @Failure 400 Invalid email supplied
+// @Failure 404 User not found
+// @router /retrieveclusters [get]
+func (this *ClusterController) RetrieveClusters() {
 	var params models.ClusterQueryParam
 	json.Unmarshal(this.Ctx.Input.RequestBody, &params)
-	data, total := models.ClusterPageList(&params)
+	data, total := models.RetrieveClusters(&params)
 
 	result := make(map[string]interface{})
 	result["total"] = total
@@ -49,6 +84,7 @@ func (this *ClusterController) DataCard() {
 	// this.Data["json"] = result
 	// this.ServeJSON()
 }
+
 func (this *ClusterController) DataGrid() {
 	var params models.ClusterQueryParam
 	json.Unmarshal(this.Ctx.Input.RequestBody, &params)
@@ -91,7 +127,14 @@ func (this *ClusterController) Edit() {
 	this.LayoutSections["footerjs"] = "cluster/edit_footerjs.html"
 }
 
-//add | update
+// @Title Save
+// @Description add | update cluster info
+// @Param   Name     path    string  true        "cluster name"
+// @Param   Description     path    string  true        "cluster description"
+// @Success 200 {object} models.Cluster
+// @Failure 400 Invalid email supplied
+// @Failure 404 User not found
+// @router /save [post]
 func (this *ClusterController) Save() {
 	var err error
 	m := models.Cluster{}

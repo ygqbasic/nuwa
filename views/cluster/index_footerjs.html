@@ -1,6 +1,7 @@
 {{template "shared/bootstraptablejs.html"}}
 
 <script>
+
     var $dataGrid = $('#dataGrid');
     var $dataCard = $('#dataCard');
     var $searchForm = $("#searchForm");
@@ -44,6 +45,7 @@
 
         //保持搜索条件面板状态
         sdtheme.searchPanelStatusInit('searchpanelbtn');
+
     }
 
     //刷新当前页
@@ -53,20 +55,10 @@
         highlightPk = pk;
     }
 
-    //刷新并跳转至第一页
-    function refreshToFirstPage() {
-        //表格刷新时，保存查询条件到cookie
-        sdtheme.saveSearchText('searchForm');
-        //刷新并跳转至第1页
-        $dataGrid.bootstrapTable('refresh', { pageNumber: 1 });
-        //同时要更新cookie里保存当前页码
-        $.cookie('dataGrid.bs.table.pageNumber', 1, { expires: 1 });
-    }
-
     //Card list init
     function dataCardInit(){
         //get data from server
-        var url = '{{ urlfor "ClusterController.DataCard"}}';
+        var url = '{{ urlfor "ClusterController.RetrieveClusters"}}';
         $.sdpost(url, {}, function (re) {
             if (re.code === 0) {
                 //拼接表格               
@@ -95,7 +87,7 @@
             html.push('     <div class="icon">');
             html.push('         <i class="ion ion-android-laptop"></i>');
             html.push('     </div>');
-            html.push('     <a href="../equipmentdtuconfig/index" class="small-box-footer">更多信息 <i class="fa fa-arrow-circle-right"></i></a>');
+            html.push('     <a href="../cluster/'+e.Id+'/detail" class="small-box-footer">更多信息 <i class="fa fa-arrow-circle-right"></i></a>');
             html.push(' </div>');
             html.push('</div>');
         });
@@ -110,7 +102,7 @@
         title += "集群";
 
         var url = '{{ urlfor "ClusterController.Edit"}}' + '/' + Id;
-        $("#NoPermissioniframe").attr("src", url);
+        $("#NoPermissioniframe").attr("src", url);    
         $('#NoPermissionModal').modal({ show: true, backdrop: 'static' });
         $('#NoPermissionModalLabel').html(title);
         // layer.open({
@@ -166,4 +158,6 @@
             });
         });
     }
+
+
 </script>

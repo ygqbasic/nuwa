@@ -1,0 +1,175 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "kubernetes management api",
+        "description": "manage api docs.",
+        "version": "1.0.0",
+        "contact": {
+            "email": "ygqbasic@gmail.com"
+        }
+    },
+    "basePath": "/v1",
+    "paths": {
+        "/cluster/retrieveclusters": {
+            "get": {
+                "tags": [
+                    "cluster"
+                ],
+                "description": "get all cluster",
+                "operationId": "ClusterController.RetrieveClusters",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "key",
+                        "description": "The email for login",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Cluster"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid email supplied"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        },
+        "/cluster/save": {
+            "post": {
+                "tags": [
+                    "cluster"
+                ],
+                "description": "add | update cluster info",
+                "operationId": "ClusterController.Save",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "Name",
+                        "description": "cluster name",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "path",
+                        "name": "Description",
+                        "description": "cluster description",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Cluster"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid email supplied"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Cluster": {
+            "title": "Cluster",
+            "type": "object",
+            "properties": {
+                "ChangeDate": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "ChangeUser": {
+                    "type": "string"
+                },
+                "ClusterHostRel": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ClusterHostRel"
+                    }
+                },
+                "CreateDate": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "CreateUser": {
+                    "type": "string"
+                },
+                "Description": {
+                    "type": "string"
+                },
+                "Id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "State": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ClusterHostRel": {
+            "title": "ClusterHostRel",
+            "type": "object",
+            "properties": {
+                "Cluster": {
+                    "$ref": "#/definitions/models.Cluster"
+                },
+                "Host": {
+                    "$ref": "#/definitions/models.Host"
+                },
+                "Id": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "models.Host": {
+            "title": "Host",
+            "type": "object",
+            "properties": {
+                "ChangeDate": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "ChangeUser": {
+                    "type": "string"
+                },
+                "CreateDate": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "CreateUser": {
+                    "type": "string"
+                },
+                "Description": {
+                    "type": "string"
+                },
+                "HostName": {
+                    "type": "string"
+                },
+                "Id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Ip": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

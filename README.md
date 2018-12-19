@@ -39,7 +39,13 @@
 14. 增加了对https的支持
 
 # 安装方法
-本系统基于beego开发，默认使用mysql数据库，缓存redis
+##开发环境
+1. 安装dep
+<br>`go get -u github.com/golang/dep/cmd/dep`
+2. 初始化，在项目目录下运行：
+<br>`dep init`
+
+##本系统基于beego开发，默认使用mysql数据库，缓存redis
 1. 安装golang环境（ 略）
 2. 运行MySQL和Redis
 3. 安装本系统

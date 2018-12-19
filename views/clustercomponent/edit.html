@@ -1,0 +1,34 @@
+<div class="row">
+    <!-- form start -->
+    <form class="form-horizontal" style="margin:20px;" id="thisForm">
+        <input type="hidden" Name="Id" id="Id" value="{{.m.Id}}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">服务名称<span class="text-red">*</span></label>
+            <div class="col-sm-8">
+                <input type="text" name="ComponentName" class="form-control" placeholder="" onfocus=this.select() value="{{.m.ComponentName}}">
+            </div>
+           
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">版本<span class="text-red">*</span></label>
+            <div class="col-sm-8">
+                <input type="text" name="Version" class="form-control" placeholder="" onfocus=this.select() value="{{.m.ComponentName}}">
+            </div>
+            
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">属性</label>
+            <div class="col-sm-8">
+                <input type="text" name="Description" class="form-control" placeholder="" onfocus=this.select() value="{{.m.Description}}">
+            </div>
+           
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">主机</label>
+            <div class="col-sm-8">
+                <input type="text" name="Hosts" class="form-control" placeholder="" onfocus=this.select() value="{{.m.Description}}">
+            </div>
+           
+        </div>
+    </form>
+</div>

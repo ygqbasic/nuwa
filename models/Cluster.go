@@ -15,14 +15,14 @@ const (
 
 type Cluster struct {
 	Id             int               `form:"Id"`
-	Name           string            `orm:"size(256)" Json:"name"`
+	Name           string            `orm:"size(256);unique" Json:"name"`
 	Description    string            `orm:"size(256)" Json:"description"`
 	State          string            `orm:"size(256)" Json:"state"`
 	ClusterHostRel []*ClusterHostRel `orm:"reverse(many)" Json:"-"`
 	CreateUser     string            `orm:"column(createuser)" form:"CreateUser"`
 	CreateDate     time.Time         `orm:"column(createdate)" form:"CreateDate"`
 	ChangeUser     string            `orm:"column(changeuser)" form:"ChangeUser"`
-	ChangeDate     time.Time         `orm:"column(changedate)" form:"ChangeDate"`
+	ChangeDate     time.Time         `orm:"column(changedate);null" form:"ChangeDate"`
 }
 
 func init() {

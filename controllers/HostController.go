@@ -36,6 +36,20 @@ func (this *HostController) Index() {
 	this.Data["canDelete"] = this.checkActionAuthor("HostController", "Delete")
 }
 
+func (this *HostController) RetrieveHosts() {
+	Id, _ := this.GetInt(":cluster_id", 0)
+
+	data, total := models.RetrieveHosts(Id)
+
+	result := make(map[string]interface{})
+	result["total"] = total
+	result["rows"] = data
+
+	//this.jsonResult(enums.JRCodeSucc, "", data)
+	this.Data["json"] = result
+	this.ServeJSON()
+}
+
 func (this *HostController) DataCard() {
 	var params models.HostQueryParam
 	json.Unmarshal(this.Ctx.Input.RequestBody, &params)
