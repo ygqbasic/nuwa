@@ -155,7 +155,7 @@ func init() {
 			),
 			beego.NSNamespace("/host",
 				beego.NSInclude(
-					&controllers.HostController{},
+					&controllers.ClusterHostController{},
 				),
 			),
 		)

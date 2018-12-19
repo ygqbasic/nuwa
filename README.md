@@ -40,8 +40,9 @@
 
 # 安装方法
 ##开发环境
-1. 安装dep
-<br>`go get -u github.com/golang/dep/cmd/dep`
+1. 导入包
+<br>`go get gopkg.in/yaml.v2`
+<br>`go get gopkg.in/yaml.v2`
 2. 初始化，在项目目录下运行：
 <br>`dep init`
 

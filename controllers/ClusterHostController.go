@@ -51,9 +51,9 @@ func (this *ClusterHostController) RetrieveHosts() {
 }
 
 func (this *ClusterHostController) DataCard() {
-	var params models.HostQueryParam
+	var params models.ClusterHostQueryParam
 	json.Unmarshal(this.Ctx.Input.RequestBody, &params)
-	data, total := models.HostPageList(&params)
+	data, total := models.ClusterHostPageList(&params)
 
 	result := make(map[string]interface{})
 	result["total"] = total
@@ -65,7 +65,7 @@ func (this *ClusterHostController) DataCard() {
 }
 
 func (this *ClusterHostController) DataGrid() {
-	var params models.HostQueryParam
+	var params models.ClusterHostQueryParam
 	json.Unmarshal(this.Ctx.Input.RequestBody, &params)
 	data, total := models.ClusterHostPageList(&params)
 
@@ -78,7 +78,7 @@ func (this *ClusterHostController) DataGrid() {
 }
 
 func (this *ClusterHostController) DataList() {
-	var params = models.HostQueryParam{}
+	var params = models.ClusterHostQueryParam{}
 	data := models.ClusterHostDataList(&params)
 	this.jsonResult(enums.JRCodeSucc, "", data)
 }

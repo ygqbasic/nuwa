@@ -8,6 +8,7 @@ import (
 	"path"
 
 	"github.com/golang/glog"
+	"github.com/ygqbasic/nuwa/models"
 )
 
 const (
@@ -26,7 +27,7 @@ var (
 	}
 )
 
-func InstantiateCluster(wd string, cluster *Cluster) error {
+func InstantiateCluster(wd string, cluster *models.Cluster) error {
 	oldwd, err := os.Getwd()
 	if err != nil {
 		return err
@@ -37,7 +38,7 @@ func InstantiateCluster(wd string, cluster *Cluster) error {
 	}
 	defer os.Chdir(oldwd)
 
-	newFolder := fmt.Sprintf("cluster-%s-%s", cluster.Name, cluster.ID)
+	newFolder := fmt.Sprintf("cluster-%s-%s", cluster.Name, cluster.Id)
 
 	if err := os.RemoveAll(newFolder); err != nil {
 		return err
@@ -49,7 +50,7 @@ func InstantiateCluster(wd string, cluster *Cluster) error {
 
 	for _, com := range cluster.Components {
 		if err := os.Mkdir(
-			path.Join(newFolder, com.Name+PlaybookSuffix),
+			path.Join(newFolder, com.ComponentName+PlaybookSuffix),
 			0755,
 		); err != nil {
 			return err
@@ -58,20 +59,20 @@ func InstantiateCluster(wd string, cluster *Cluster) error {
 		for _, f := range ansibleFile {
 			p := path.Join(
 				clusterTemplate,
-				com.Name+PlaybookSuffix,
+				com.ComponentName+PlaybookSuffix,
 				f,
 			)
 
 			if _, err := os.Stat(p); os.IsNotExist(err) {
-				glog.V(4).Infof("%s's %s folder is not exist", com.Name, f)
+				glog.V(4).Infof("%s's %s folder is not exist", com.ComponentName, f)
 				continue
 			} else if err != nil {
-				return fmt.Errorf("check %s's %s folder error: %v", com.Name, f, err)
+				return fmt.Errorf("check %s's %s folder error: %v", com.ComponentName, f, err)
 			}
 
 			if err := os.Symlink(
 				path.Join(wd, p),
-				path.Join(newFolder, com.Name+PlaybookSuffix, f),
+				path.Join(newFolder, com.ComponentName+PlaybookSuffix, f),
 			); err != nil {
 				return err
 			}
@@ -80,11 +81,11 @@ func InstantiateCluster(wd string, cluster *Cluster) error {
 		if err := MkGroupVars(
 			path.Join(wd,
 				clusterTemplate,
-				com.Name+PlaybookSuffix,
+				com.ComponentName+PlaybookSuffix,
 			),
 			path.Join(wd,
 				newFolder,
-				com.Name+PlaybookSuffix,
+				com.ComponentName+PlaybookSuffix,
 			),
 		); err != nil {
 			return err

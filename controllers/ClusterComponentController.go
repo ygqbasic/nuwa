@@ -51,9 +51,9 @@ func (this *ClusterComponentController) RetrieveComponents() {
 }
 
 func (this *ClusterComponentController) DataCard() {
-	var params models.HostQueryParam
+	var params models.ClusterComponentQueryParam
 	json.Unmarshal(this.Ctx.Input.RequestBody, &params)
-	data, total := models.HostPageList(&params)
+	data, total := models.ClusterComponentPageList(&params)
 
 	result := make(map[string]interface{})
 	result["total"] = total

@@ -9,7 +9,10 @@ import (
 type ClusterComponent struct {
 	Id            int       `form:"Id"`
 	ComponentName string    `orm:"size(24)" Json:"ComponentName"`
+	Version       string    `orm:"size(24)" Json:"Version"`
 	Component     string    `orm:"size(246)" Json:"Component"`
+	Property      string    `orm:"size(246)" Json:"property"`
+	Hosts         string    `orm:"size(246)" Json:"hosts"`
 	Description   string    `orm:"size(256)" Json:"description"`
 	Cluster       *Cluster  `orm:"rel(fk)"`
 	CreateUser    string    `orm:"column(createuser)" form:"CreateUser"`

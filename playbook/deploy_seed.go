@@ -1,6 +1,7 @@
 package playbook
 
 import (
+	"encoding/json"
 	"path"
 
 	"github.com/ygqbasic/nuwa/models"
@@ -11,14 +12,12 @@ type DeploySeed map[string]*Component
 func NewDeploySeed(c *models.Cluster, workDir string) *DeploySeed {
 	cs := DeploySeed(make(map[string]*Component))
 	for _, cp := range c.Components {
-		cs[cp.Name] = &Component{
-			MetaComponent: cp.MetaComponent,
-			Hosts:         cp.Hosts,
-		}
+
+		cs[cp.ComponentName] = json.Unmarshal([]byte(cp.Component), &Component)
 
 		getInherentProperties(
-			path.Join(workDir, cp.Name+PlaybookSuffix, cp.Version),
-			cs[cp.Name],
+			path.Join(workDir, cp.ComponentName+PlaybookSuffix, cp.Version),
+			cs[cp.ComponentName],
 		)
 	}
 	return &cs
