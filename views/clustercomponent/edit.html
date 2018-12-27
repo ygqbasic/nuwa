@@ -2,31 +2,39 @@
     <!-- form start -->
     <form class="form-horizontal" style="margin:20px;" id="thisForm">
         <input type="hidden" Name="Id" id="Id" value="{{.m.Id}}">
+        <input type="hidden" Name="ClusterId" id="ClusterId" value="{{.m.Cluster.Id}}">
+
         <div class="form-group">
-            <label class="col-sm-2 control-label">服务名称<span class="text-red">*</span></label>
+            <label class="col-sm-2 control-label">组件名称<span class="text-red">*</span></label>
             <div class="col-sm-8">
-                <input type="text" name="ComponentName" class="form-control" placeholder="" onfocus=this.select() value="{{.m.ComponentName}}">
+                    <select name="ComponentName" id="ComponentName" class="form-control bs-select" value="{{.m.ComponentName}}">
+
+                    </select>
+               
             </div>
            
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">版本<span class="text-red">*</span></label>
             <div class="col-sm-8">
-                <input type="text" name="Version" class="form-control" placeholder="" onfocus=this.select() value="{{.m.ComponentName}}">
+                <input type="text" name="Version" class="form-control" placeholder="" onfocus=this.select() value="{{.m.Version}}">
             </div>
             
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">属性</label>
             <div class="col-sm-8">
-                <input type="text" name="Description" class="form-control" placeholder="" onfocus=this.select() value="{{.m.Description}}">
+                <input type="text" name="Properties" class="form-control" placeholder="" onfocus=this.select() value="{{.m.Properties}}">
             </div>
            
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">主机</label>
             <div class="col-sm-8">
-                <input type="text" name="Hosts" class="form-control" placeholder="" onfocus=this.select() value="{{.m.Description}}">
+                <select  name="Hosts" id="Hosts"   class="selectpicker form-control" multiple data-max-options="10" value="{{.m.Hosts}}">
+                        
+                </select>
+              
             </div>
            
         </div>

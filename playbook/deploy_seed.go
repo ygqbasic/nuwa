@@ -1,35 +1,35 @@
 package playbook
 
 import (
-	"encoding/json"
 	"path"
 
 	"github.com/ygqbasic/nuwa/models"
 )
 
-type DeploySeed map[string]*Component
+type DeploySeed map[string]*models.ClusterComponent
 
 func NewDeploySeed(c *models.Cluster, workDir string) *DeploySeed {
-	cs := DeploySeed(make(map[string]*Component))
-	for _, cp := range c.Components {
+	comps := DeploySeed(make(map[string]*models.ClusterComponent))
+	cs, _ := models.RetrieveClusterComponents(c.Id)
 
-		cs[cp.ComponentName] = json.Unmarshal([]byte(cp.Component), &Component)
-
+	for _, cp := range cs {
+		comps[cp.ComponentName] = cp
 		getInherentProperties(
 			path.Join(workDir, cp.ComponentName+PlaybookSuffix, cp.Version),
-			cs[cp.ComponentName],
+			cp,
 		)
 	}
-	return &cs
+	return &comps
 }
 
 func (ds *DeploySeed) AllHosts() map[string]*models.ClusterHost {
+
 	hosts := make(map[string]*models.ClusterHost)
-	for _, v := range map[string]*Component(*ds) {
-		for _, hv := range v.Hosts {
-			for _, h := range hv {
-				hosts[h.Ip] = h
-			}
+	for _, v := range map[string]*models.ClusterComponent(*ds) {
+		hv, _ := models.RetrieveComponentHosts(v.Hosts)
+
+		for _, h := range hv {
+			hosts[h.Ip] = h
 		}
 	}
 	return hosts

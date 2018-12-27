@@ -5,12 +5,17 @@
 <script src="/static/sdtheme/scripts/sdvalidate.js"></script>
 
 <script>
-	var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+    var $ComponentName=$("#ComponentName");
+    var $Hosts=$("#Hosts");
    $(function () {
        pageInit();
    })
 
     function pageInit(){
+        componentNameInit();
+        hostsInit();
+        
         //验证
         validateInfo();
     }
@@ -20,10 +25,10 @@
         var $thisForm = $('#thisForm');
         $thisForm.sdvalidate({
             rules: {
-                Name: {
+                ComponentName: {
                     required: true
                 },
-                Description:{
+                Version:{
                     required: true
                 }
             },
@@ -46,7 +51,44 @@
         });
     }
 
+    function componentNameInit(){
+        $ComponentName.selectpicker('val', '');
+        $ComponentName.selectpicker('refresh');  
+
+        $ComponentName.append(' <option value="docker">docker</option>');
+        $ComponentName.append(' <option value="etcd">etcd</option>');
+        $ComponentName.append(' <option value="registry">registry</option>');
+        $ComponentName.append(' <option value="kubernetes">kubernetes</option>');
+        
+        $ComponentName.selectpicker('val', '{{.m.ComponentName}}');
+        $ComponentName.selectpicker('refresh');  
+    }
+    // hosts select init
+    function hostsInit(){
+        $Hosts.selectpicker('val', '');
+        $Hosts.selectpicker('refresh');  
+
+        //get data from server
+        var url = '{{ urlfor "ClusterHostController.RetrieveHosts" ":cluster_id" .m.Cluster.Id }}';
+        $.sdpost(url, {}, function (re) {
+            //             
+            //$Hosts.html('');
+
+            var html = [];
+            $(re.rows).each(function (i, e) {
+                $Hosts.append(' <option value="'+e.HostName+'">'+e.HostName+'</option>');
+               // html.push(' <option value="'+e.Name+'">'+e.Name+'</option>')
+            });
+            //$Hosts.html(html.join(''));
+            $Hosts.selectpicker('val', '{{.m.Hosts}}'.split(','));
+            $('.selectpicker').selectpicker('refresh');  
+        });
+    }
+
     function FormSubmit() {
         $("#thisForm").submit();		
     }
+
+
+
 </script>

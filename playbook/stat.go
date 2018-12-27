@@ -9,8 +9,10 @@ import (
 	"path"
 	"strings"
 	"text/template"
-	yaml "gopkg.in/yaml.v2"
+
 	"github.com/golang/glog"
+	"github.com/ygqbasic/nuwa/models"
+	yaml "gopkg.in/yaml.v2"
 )
 
 func GetComponents(path string) []string {
@@ -47,7 +49,7 @@ func GetVersions(path string) ([]string, error) {
 	return versions, nil
 }
 
-func getInherentProperties(dir string, cp *Component) {
+func getInherentProperties(dir string, cp *models.ClusterComponent) {
 	buf := &bytes.Buffer{}
 
 	bs, err := ioutil.ReadFile(path.Join(dir, "inherent.yaml"))
@@ -70,7 +72,7 @@ func getInherentProperties(dir string, cp *Component) {
 	}
 	glog.V(2).Infof("genereate inherent property: %s", buf.Bytes())
 
-	cp.Inherent = value
+	//cp.Inherent = value
 }
 
 func GetOrderedComponents(dir string) ([]string, error) {

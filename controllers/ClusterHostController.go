@@ -88,13 +88,14 @@ func (this *ClusterHostController) Edit() {
 		this.Save()
 	}
 
+	CId, _ := this.GetInt(":cluster_id", 0)
 	Id, _ := this.GetInt(":id", 0)
-	m := models.ClusterHost{Id: Id}
+	m := models.ClusterHost{Id: Id, Cluster: &models.Cluster{Id: CId}}
 	if Id > 0 {
 		o := orm.NewOrm()
 		err := o.Read(&m)
 		if err != nil {
-			this.pageError("数据无效，请刷新后重试")
+			this.pageError("数据无效，请刷新后重试" + string(CId))
 		}
 	} else {
 		//m.State = "initial"
@@ -119,9 +120,11 @@ func (this *ClusterHostController) Save() {
 	id := this.Input().Get("Id")
 	m.Id, _ = strconv.Atoi(id)
 
-	m.HostName = this.GetString("HostName")
-	m.Ip = this.GetString("Ip")
-	m.Description = this.GetString("Description")
+	// m.HostName = this.GetString("HostName")
+	// m.Ip = this.GetString("Ip")
+	// m.Description = this.GetString("Description")
+	clusterId, _ := this.GetInt("ClusterId")
+	m.Cluster = &models.Cluster{Id: clusterId}
 
 	o := orm.NewOrm()
 	if m.Id == 0 {

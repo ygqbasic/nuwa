@@ -10,6 +10,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"github.com/ygqbasic/nuwa/enums"
 	"github.com/ygqbasic/nuwa/models"
+	"github.com/ygqbasic/nuwa/runtime"
 )
 
 type ClusterController struct {
@@ -186,4 +187,41 @@ func (this *ClusterController) Delete() {
 	} else {
 		this.jsonResult(enums.JRCodeFailed, "删除失败", 0)
 	}
+}
+
+func (this *ClusterController) install() {
+	var err error
+	op := &runtime.LaunchParameters{}
+
+	if err = this.ParseForm(&op); err != nil {
+		this.jsonResult(enums.JRCodeFailed, err.Error(), op)
+		return
+	}
+
+	clusterID := this.GetString("cluster_id")
+	id, err := strconv.Atoi(clusterID)
+	o := orm.NewOrm()
+	cluster := models.Cluster{Id: id}
+
+	err = o.Read(&cluster)
+
+	if err != nil {
+		this.jsonResult(enums.JRCodeFailed, err.Error(), op)
+		return
+	}
+
+	if err := runtime.StartOperate(&cluster, op); err != nil {
+		this.jsonResult(enums.JRCodeFailed, err.Error(), op)
+		return
+	}
+
+	cluster.State = models.Processing
+	cluster.ChangeUser = this.curUser.RealName
+	cluster.ChangeDate = time.Now()
+	if _, err = o.Update(&cluster, "State", "ChangeUser", "ChangeDate"); err != nil {
+		this.jsonResult(enums.JRCodeFailed, err.Error(), cluster)
+		return
+	}
+
+	this.jsonResult(enums.JRCodeSucc, "stated", cluster.Id)
 }

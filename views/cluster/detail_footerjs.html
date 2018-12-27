@@ -25,38 +25,38 @@
         //Init Components
         componentsInit();
 
-        //搜索
-        $("#btnSearch").on("click", function (e) {
-            refreshToFirstPage();
-        });
+        // //搜索
+        // $("#btnSearch").on("click", function (e) {
+        //     refreshToFirstPage();
+        // });
 
-        //清除搜索
-        $("#btnClearSearch").on("click", function (e) {
-            $('select', $searchForm).selectpicker('val', '');
-            $('input', $searchForm).val('');
-            refreshToFirstPage();
-        });
+        // //清除搜索
+        // $("#btnClearSearch").on("click", function (e) {
+        //     $('select', $searchForm).selectpicker('val', '');
+        //     $('input', $searchForm).val('');
+        //     refreshToFirstPage();
+        // });
 
-        //绑定加载成功的事件，成功后高亮显示当前项
-        $dataGrid.on('load-success.bs.table', function () {
-            if (highlightPk !== null && typeof highlightPk !== 'undefined') {
-                sdtheme.highlight($dataGrid.find('tbody tr[data-pk="' + highlightPk + '"]'));
-            }
-            //高亮显示一次后失效
-            highlightPk = null;
-        });
+        // //绑定加载成功的事件，成功后高亮显示当前项
+        // $dataGrid.on('load-success.bs.table', function () {
+        //     if (highlightPk !== null && typeof highlightPk !== 'undefined') {
+        //         sdtheme.highlight($dataGrid.find('tbody tr[data-pk="' + highlightPk + '"]'));
+        //     }
+        //     //高亮显示一次后失效
+        //     highlightPk = null;
+        // });
 
-        //保持搜索条件面板状态
-        sdtheme.searchPanelStatusInit('searchpanelbtn');
+        // //保持搜索条件面板状态
+        // sdtheme.searchPanelStatusInit('searchpanelbtn');
 
     }
 
     //刷新当前页
-    function refresh(pk) {
-        $("#NoPermissionModal").modal('hide');  //手动关闭
-        dataCardInit();
-        highlightPk = pk;
-    }
+    // function refresh(pk) {
+    //     $("#NoPermissionModal").modal('hide');  //手动关闭
+    //     dataCardInit();
+    //     highlightPk = pk;
+    // }
 
     // list init
     function hostsInit(){
@@ -86,11 +86,15 @@
         $(data).each(function (i, e) {
 
             html.push('<tr>')
-            html.push(' <td>1</td>')
+            html.push(' <td>'+(i+1)+'</td>')
             html.push(' <td>'+e.HostName+'</td>')
             html.push(' <td>'+e.Ip+'</td>')
             html.push(' <td>'+e.Description+'</td>')
-            html.push(' <td>--</td>')
+            html.push(' <td>')
+            if ('{{.canEdit}}' === 'true') {
+                html.push('<button class="btn btn-primary btn-xs" onclick="EditHostFun({{.clusterId}},' + e.Id + ')">' +'<i class="fa fa-pencil"></i> 编辑</button>');
+            }
+            html.push(' </td>')
             html.push('</tr>')
         });
         $clusterHosts.html(html.join(''));
@@ -104,77 +108,54 @@
         $(data).each(function (i, e) {
 
             html.push('<tr>')
-            html.push(' <td>1</td>')
+            html.push(' <td>'+(i+1)+'</td>')
             html.push(' <td>'+e.ComponentName+'</td>')
-            html.push(' <td>'+e.Component+'</td>')
-            html.push(' <td>'+e.Description+'</td>')
-            html.push(' <td>self:k8s01,k8s02,k8s03</td>')
-            html.push(' <td>--</td>')
+            html.push(' <td>'+e.Version+'</td>')
+            html.push(' <td>'+e.Properties+'</td>')
+            html.push(' <td>'+e.Hosts+'</td>')
+            html.push(' <td>')
+            if ('{{.canEdit}}' === 'true') {
+                html.push('<button class="btn btn-primary btn-xs" onclick="EditComponentFun({{.clusterId}},' + e.Id + ')">' +'<i class="fa fa-pencil"></i> 编辑</button>');
+            }
+            html.push(' </td>')
             html.push('</tr>')
         });
         $clusterComponents.html(html.join(''));
     }
 
-    function EditHostFun(Id) {
+    function EditHostFun(Cid,Id) {
         var title = '添加';
         if (Id > 0) {
             title = "编辑"
         }
         title += "主机";
 
-        var url = '{{ urlfor "ClusterHostController.Edit"}}' + '/' + Id;
+        var url = '{{ urlfor "ClusterHostController.Edit"}}' + '/'+ Cid + '/' + Id;
         $("#NoPermissioniframe").attr("src", url);    
         $('#NoPermissionModal').modal({ show: true, backdrop: 'static' });
         $('#NoPermissionModalLabel').html(title);
     }
 
-    function EditComponentFun(Id) {
+    function EditComponentFun(Cid,Id) {
         var title = '添加';
         if (Id > 0) {
             title = "编辑"
         }
         title += "服务组件";
 
-        var url = '{{ urlfor "ClusterComponentController.Edit"}}' + '/' + Id;
+        var url = '{{ urlfor "ClusterComponentController.Edit"}}' + '/'+ Cid + '/' + Id;
         $("#NoPermissioniframe").attr("src", url);    
         $('#NoPermissionModal').modal({ show: true, backdrop: 'static' });
         $('#NoPermissionModalLabel').html(title);
     }
 
 
-    function EditFun(Id) {
-        var title = '添加';
-        if (Id > 0) {
-            title = "编辑"
-        }
-        title += "集群";
-
-        var url = '{{ urlfor "ClusterController.Edit"}}' + '/' + Id;
-        $("#NoPermissioniframe").attr("src", url);    
-        $('#NoPermissionModal').modal({ show: true, backdrop: 'static' });
-        $('#NoPermissionModalLabel').html(title);
-        // layer.open({
-        //     type: 2,
-        //     title: title,
-        //     shadeClose: false,
-        //     shade: 0.2,
-        //     scrollbar: false,
-        //     //maxmin: true,
-        //     shift: 1,
-        //     area: ['500px', '400px'],
-        //     content: url,
-        //     btn: ['保存', '关闭'],
-        //     yes: function (index, layero) {
-        //         var iframeWin = window[layero.find('iframe')[0]['name']];
-        //         iframeWin.FormSubmit();
-        //     }
-        // });
-    }
+   
 
     function Save(){
         var iframeWin = window[$('#NoPermissionModal').children().find('iframe')[0]['name']];
         iframeWin.FormSubmit();
-        //location.reload();
+        location.reload();
  
         //refresh();
     }

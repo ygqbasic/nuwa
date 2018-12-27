@@ -6,6 +6,8 @@ import (
 	"path"
 	"sort"
 
+	"github.com/astaxie/beego/orm"
+	"github.com/ygqbasic/nuwa/models"
 	"github.com/ygqbasic/nuwa/playbook"
 
 	"github.com/golang/glog"
@@ -26,7 +28,7 @@ func Run(w string) {
 }
 
 // StartOperate - start operate a cluster
-func StartOperate(cluster *database.Cluster, config *LaunchParameters) error {
+func StartOperate(cluster *models.Cluster, config *LaunchParameters) error {
 	command.deploySeed = playbook.NewDeploySeed(cluster, command.workDir)
 
 	if err := playbook.PreparePlaybooks(command.workDir, command.deploySeed); err != nil {
@@ -65,9 +67,9 @@ var (
 
 // LaunchParameters - needed when start operate a cluser
 type LaunchParameters struct {
-	Operation  string   `json:"operation"`
-	Components []string `json:"components"`
-	Cluster    *Cluster `json:"-"`
+	Operation  string          `json:"operation"`
+	Components []string        `json:"components"`
+	Cluster    *models.Cluster `json:"-"`
 }
 
 type commandT struct {
@@ -75,7 +77,7 @@ type commandT struct {
 	currentIndex int
 	currentCmd   *exec.Cmd
 
-	cluster     *database.Cluster
+	cluster     *models.Cluster
 	ansibleFile string
 	workDir     string
 	deploySeed  *playbook.DeploySeed
@@ -127,7 +129,7 @@ func (c *commandT) Launch(w string) {
 					break
 				}
 				c.run(w)
-				c.runtime.rotateStage(c.cluster.ID, c.received[c.currentIndex])
+				c.runtime.rotateStage(c.cluster.Id, c.received[c.currentIndex])
 			} else {
 				c.complete(failed)
 			}
@@ -172,7 +174,7 @@ func (c *commandT) start(config *LaunchParameters) {
 	c.runtime.startOperate(c.cluster)
 }
 
-func (c *commandT) StartOperate(cluster *database.Cluster, config *LaunchParameters) error {
+func (c *commandT) StartOperate(cluster *models.Cluster, config *LaunchParameters) error {
 	if err := c.acquire(); err != nil {
 		return err
 	}
@@ -194,7 +196,7 @@ func (c *commandT) run(w string) {
 	cmd.Dir = path.Join(
 		w,
 		step+playbook.PlaybookSuffix,
-		map[string]*playbook.Component(*c.deploySeed)[step].Version,
+		map[string]*models.ClusterComponent(*c.deploySeed)[step].Version,
 	)
 	c.currentCmd = cmd
 
@@ -218,10 +220,10 @@ func (c *commandT) complete(code completeCode) {
 	switch code {
 	case finished:
 		if c.ansibleFile == installFile {
-			c.cluster.State = database.Success
+			c.cluster.State = models.Success
 			glog.V(3).Info("complete all install step")
 		} else if c.ansibleFile == resetFile {
-			c.cluster.State = database.Initial
+			c.cluster.State = models.Initial
 			glog.V(3).Info("complete all reset step")
 		}
 	case stopped:
@@ -232,15 +234,19 @@ func (c *commandT) complete(code completeCode) {
 		if err := c.currentCmd.Process.Kill(); err != nil {
 			glog.Errorf("stop install error: %v", err)
 		}
-		c.cluster.State = database.Failed
+		c.cluster.State = models.Failed
 	case failed:
-		c.cluster.State = database.Failed
+		c.cluster.State = models.Failed
 		glog.V(3).Info("failed at a step")
 	}
 
-	err := database.Instance().UpdateCluster(c.cluster)
+	//err := models.UpdateCluster(c.cluster)
+	var err error
+	o := orm.NewOrm()
+	_, err = o.Update(c.cluster, "state", "Description", "ChangeUser", "ChangeDate")
+
 	if err != nil {
-		glog.Errorf("update cluster %s error %v", c.cluster.ID, err)
+		glog.Errorf("update cluster %s error %v", c.cluster.Id, err)
 		return
 	}
 }

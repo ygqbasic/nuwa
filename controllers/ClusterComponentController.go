@@ -87,9 +87,9 @@ func (this *ClusterComponentController) Edit() {
 	if this.Ctx.Request.Method == "POST" {
 		this.Save()
 	}
-
+	CId, _ := this.GetInt(":cluster_id", 0)
 	Id, _ := this.GetInt(":id", 0)
-	m := models.ClusterComponent{Id: Id}
+	m := models.ClusterComponent{Id: Id, Cluster: &models.Cluster{Id: CId}}
 	if Id > 0 {
 		o := orm.NewOrm()
 		err := o.Read(&m)
@@ -119,9 +119,10 @@ func (this *ClusterComponentController) Save() {
 	id := this.Input().Get("Id")
 	m.Id, _ = strconv.Atoi(id)
 
-	m.ComponentName = this.GetString("ComponentName")
-	m.Component = this.GetString("Component")
-	m.Description = this.GetString("Description")
+	clusterId, _ := this.GetInt("ClusterId")
+	m.Cluster = &models.Cluster{Id: clusterId}
+
+	m.Hosts = strings.Join(this.GetStrings("Hosts"), ",")
 
 	o := orm.NewOrm()
 	if m.Id == 0 {
@@ -137,7 +138,7 @@ func (this *ClusterComponentController) Save() {
 		m.ChangeUser = this.curUser.RealName
 		m.ChangeDate = time.Now()
 
-		if _, err = o.Update(&m, "HostName", "Description", "ChangeUser", "ChangeDate"); err == nil {
+		if _, err = o.Update(&m, "Version", "ComponentName", "Description", "Properties", "Hosts", "ChangeUser", "ChangeDate"); err == nil {
 			this.jsonResult(enums.JRCodeSucc, "编辑成功", m.Id)
 		} else {
 			this.jsonResult(enums.JRCodeFailed, "编辑失败", m.Id)

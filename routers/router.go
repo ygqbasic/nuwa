@@ -73,7 +73,7 @@ func init() {
 	beego.Router("/clusterhost/retrieveHosts/?:cluster_id", &controllers.ClusterHostController{}, "Get,Post:RetrieveHosts")
 	beego.Router("/clusterhost/datagrid", &controllers.ClusterHostController{}, "Get,Post:DataGrid")
 	beego.Router("/clusterhost/datalist", &controllers.ClusterHostController{}, "Post:DataList")
-	beego.Router("/clusterhost/edit/?:id", &controllers.ClusterHostController{}, "Get,Post:Edit")
+	beego.Router("/clusterhost/edit/?:cluster_id/?:id", &controllers.ClusterHostController{}, "Get,Post:Edit")
 	beego.Router("/clusterhost/delete", &controllers.ClusterHostController{}, "Post:Delete")
 
 	//ClusterComponent
@@ -81,7 +81,7 @@ func init() {
 	beego.Router("/clustercomponent/retrievecomponents/?:cluster_id", &controllers.ClusterComponentController{}, "Get,Post:RetrieveComponents")
 	beego.Router("/clustercomponent/datagrid", &controllers.ClusterComponentController{}, "Get,Post:DataGrid")
 	beego.Router("/clustercomponent/datalist", &controllers.ClusterComponentController{}, "Post:DataList")
-	beego.Router("/clustercomponent/edit/?:id", &controllers.ClusterComponentController{}, "Get,Post:Edit")
+	beego.Router("/clustercomponent/edit/?:cluster_id/?:id", &controllers.ClusterComponentController{}, "Get,Post:Edit")
 	beego.Router("/clustercomponent/delete", &controllers.ClusterComponentController{}, "Post:Delete")
 
 	//BackendConf

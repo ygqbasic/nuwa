@@ -1,6 +1,7 @@
 package models
 
 import (
+	"strings"
 	"time"
 
 	"github.com/astaxie/beego/orm"
@@ -42,6 +43,18 @@ func RetrieveClusterHosts(clusterid int) ([]*ClusterHost, int64) {
 	data := make([]*ClusterHost, 0)
 
 	query = query.Filter("Cluster__Id", clusterid)
+
+	total, _ := query.Count()
+	query.All(&data)
+
+	return data, total
+}
+
+func RetrieveComponentHosts(names string) ([]*ClusterHost, int64) {
+	query := orm.NewOrm().QueryTable(ClusterHostTBName())
+	data := make([]*ClusterHost, 0)
+
+	query = query.Filter("HostName__in", strings.Split(names, ","))
 
 	total, _ := query.Count()
 	query.All(&data)

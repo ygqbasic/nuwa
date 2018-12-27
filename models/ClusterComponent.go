@@ -11,7 +11,7 @@ type ClusterComponent struct {
 	ComponentName string    `orm:"size(24)" Json:"ComponentName"`
 	Version       string    `orm:"size(24)" Json:"Version"`
 	Component     string    `orm:"size(246)" Json:"Component"`
-	Property      string    `orm:"size(246)" Json:"property"`
+	Properties    string    `orm:"size(246)" Json:"properties"`
 	Hosts         string    `orm:"size(246)" Json:"hosts"`
 	Description   string    `orm:"size(256)" Json:"description"`
 	Cluster       *Cluster  `orm:"rel(fk)"`
@@ -93,10 +93,10 @@ func ClusterComponentBatchDelete(ids []int) (int64, error) {
 }
 
 type MetaComponent struct {
-	Id       int                    `json:"id"`
-	Name     string                 `json:"name"`
-	Version  string                 `json:"version"`
-	Property map[string]interface{} `json:"properties"`
+	Id         int                    `json:"id"`
+	Name       string                 `json:"name"`
+	Version    string                 `json:"version"`
+	Properties map[string]interface{} `json:"properties"`
 }
 
 type Component struct {

@@ -8,6 +8,8 @@ import (
 	"reflect"
 	"strings"
 	"text/template"
+
+	"github.com/ygqbasic/nuwa/models"
 )
 
 // Template src is template path and dest is template output file
@@ -27,7 +29,7 @@ const (
 )
 
 func PreparePlaybooks(dir string, ds *DeploySeed) error {
-	for k, v := range map[string]*Component(*ds) {
+	for k, v := range map[string]*models.ClusterComponent(*ds) {
 		if err := preparePlaybook(path.Join(dir, k+PlaybookSuffix, v.Version), ds); err != nil {
 			return err
 		}

@@ -30,7 +30,7 @@
 
             messages: {},
             submitHandler: function (form) {
-				var url ='{{ urlfor "HostController.Edit"}}';
+				var url ='{{ urlfor "ComponentHostController.Edit"}}';
 				var params = $thisForm.serialize();
 				$.sdpost(url, params, function(re){
 					if(re.code === 0){

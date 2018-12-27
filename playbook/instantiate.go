@@ -38,7 +38,7 @@ func InstantiateCluster(wd string, cluster *models.Cluster) error {
 	}
 	defer os.Chdir(oldwd)
 
-	newFolder := fmt.Sprintf("cluster-%s-%s", cluster.Name, cluster.Id)
+	newFolder := fmt.Sprintf("cluster-%s-%s", cluster.Name, string(cluster.Id))
 
 	if err := os.RemoveAll(newFolder); err != nil {
 		return err
